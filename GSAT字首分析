@@ -1,0 +1,71 @@
+
+
+import operator
+import openpyxl
+import csv
+
+word_list = []
+for flitter in keyword:
+    outputList = []
+    ptr = 0
+    ctr = 0
+    for target in word_list:
+        ptr += 1
+        if operator.eq(flitter[0:len(flitter)],target[0:len(flitter)]):
+            outputList.append(target)
+            word_list[ptr-1] = ''
+            ctr += 1
+            
+    print(flitter+'(',end='')
+    for word in outputList:
+        print(word,end='/')
+    print(')',end='')
+    print('_'+'['+str(ctr)+']')
+
+fileOfKeyword = 'D:\\Justin\'s_University\\專題(learning)\\Software\\Word_count\\1K.xlsx'
+wb_kw = openpyxl.load_workbook(fileOfKeyword)
+ws_kw = wb_kw.get_sheet_by_name('工作表1')
+
+word_list = []
+with open('D:\\Justin\'s_University\\專題(learning)\\Software\\Word_count\\output\\Word_Appear_Years_f.csv') as csvFile:
+    csvReader = csv.reader(csvFile)
+    csvDictReader = csv.DictReader(csvFile)
+    for word in csvDictReader:
+        word_list.append(word['words'])
+keyword = []
+for i in range(2, ws_kw.max_row+1):
+    keyword.append(ws_kw['A'+str(i)].value)
+
+keyword
+# keyword.sort(reverse=True)
+keyword.sort(reverse = True, key= lambda i:len(i))
+keyword
+word_list
+with open('D:\\Justin\'s_University\\專題(learning)\\Software\\Word_Count\\output\\'+'字首分類'+'.csv', 'w', encoding='utf8', newline='') as csvFile:    
+    csvWriter = csv.writer(csvFile)
+    csvWriter.writerow(['字首(對應字母)','共有字數'])
+    for flitter in keyword:
+        output = ''
+        outputList = []
+        ptr = 0
+        ctr = 0
+        for target in word_list:
+            ptr += 1
+            if operator.eq(flitter[0:len(flitter)],target[0:len(flitter)]):
+                outputList.append(target)
+                word_list[ptr-1] = ''
+                ctr += 1
+            
+        output = flitter+'('
+#     print(flitter+'(',end='')
+        for word in outputList:
+            output += word
+            output += '/'
+#         print(word,end='/')
+        output += ')'
+        csvWriter.writerow([output, ctr])
+#     print(')',end='')
+#         output += '_'+'['+str(ctr)+']'
+#     print('_'+'['+str(ctr)+']')
+        print(output, end=' ')
+        print(ctr)
