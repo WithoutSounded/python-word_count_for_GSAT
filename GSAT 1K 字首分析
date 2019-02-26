@@ -25,6 +25,7 @@ ws_kw = wb_kw.get_sheet_by_name('工作表1')
 keyword = []
 for i in range(2, ws_kw.max_row+1):
     word = ws_kw['A'+str(i)].value
+    word = word.translate(translator)
     keyword.append(word)
 
 keyword.sort(reverse = True, key= lambda i:len(i))
@@ -45,15 +46,12 @@ with open('D:\\Justin\'s_University\\專題(learning)\\Software\\Word_Count\\out
                 ctr += 1
             
         output = flitter+'('
-#     print(flitter+'(',end='')
         for word in outputList:
             output += word
             output += '/'
-#         print(word,end='/')
+
+        if ctr:
+            output = output[:-1]
         output += ')'
         csvWriter.writerow([output, ctr])
-#     print(')',end='')
-#         output += '_'+'['+str(ctr)+']'
-#     print('_'+'['+str(ctr)+']')
-        print(output, end=' ')
-        print(ctr)
+        
