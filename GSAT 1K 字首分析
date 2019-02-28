@@ -30,7 +30,7 @@ for i in range(2, ws_kw.max_row+1):
 
 keyword.sort(reverse = True, key= lambda i:len(i))
 
-with open('D:\\Justin\'s_University\\專題(learning)\\Software\\Word_Count\\output\\'+'1K字首分類'+'.csv', 'w', encoding='utf8', newline='') as csvFile:    
+with open('D:\\Justin\'s_University\\專題(learning)\\Software\\Word_Count\\output\\'+'1K字首分類(3_letter_above)'+'.csv', 'w', encoding='utf8', newline='') as csvFile:    
     csvWriter = csv.writer(csvFile)
     csvWriter.writerow(['prefix(word fit)','# of fit word'])
     for flitter in keyword:
@@ -38,20 +38,49 @@ with open('D:\\Justin\'s_University\\專題(learning)\\Software\\Word_Count\\out
         outputList = []
         ptr = 0
         ctr = 0
-        for target in word_list:
-            ptr += 1
-            if operator.eq(flitter[0:len(flitter)],target[0:len(flitter)]):
-                outputList.append(target)
-                word_list[ptr-1] = ''
-                ctr += 1
+        if len(flitter) >= 3:
+            for target in word_list:
+                ptr += 1
+                if operator.eq(flitter[0:len(flitter)],target[0:len(flitter)]):
+                    outputList.append(target)
+                    word_list[ptr-1] = ''
+                    ctr += 1
             
-        output = flitter+'('
-        for word in outputList:
-            output += word
-            output += '/'
-
         if ctr:
+            output = flitter+'('
+            for word in outputList:
+                output += word
+                output += '/'
+                
+#           去掉尾巴多餘的 '/'
             output = output[:-1]
-        output += ')'
-        csvWriter.writerow([output, ctr])
+            output += ')'
+            csvWriter.writerow([output, ctr])
         
+with open('D:\\Justin\'s_University\\專題(learning)\\Software\\Word_Count\\output\\'+'1K字首分類(3_letter_below)'+'.csv', 'w', encoding='utf8', newline='') as csvFile:    
+    csvWriter = csv.writer(csvFile)
+    csvWriter.writerow(['prefix(word fit)','# of fit word'])
+    for flitter in keyword:
+        output = ''
+        outputList = []
+        ptr = 0
+        ctr = 0
+        if len(flitter) < 3:
+            for target in word_list:
+                ptr += 1
+                if operator.eq(flitter[0:len(flitter)],target[0:len(flitter)]):
+                    outputList.append(target)
+                    word_list[ptr-1] = ''
+                    ctr += 1
+        
+        if ctr:
+            output = flitter+'('
+            for word in outputList:
+                output += word
+                output += '/'
+                
+#           去掉尾巴多餘的 '/'
+            output = output[:-1]
+            output += ')'
+            csvWriter.writerow([output, ctr])
+
