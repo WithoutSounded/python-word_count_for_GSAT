@@ -1,0 +1,121 @@
+import csv
+
+def check_contain_chinese(check_str):
+    for ch in check_str:
+        if u'\u4e00' <= ch <= u'\u9fff':
+            return True
+    return False
+
+
+def check_contain_only_english(check_str):
+    ctr = 0
+    for en in check_str:
+        if 97 <= ord(en) <= 122:
+            ctr += 0
+        elif 65 <= ord(en) <= 90:
+            ctr += 0
+        elif ord(en) == 39:
+            ctr += 0
+        else:
+            ctr += 1
+    if ctr != 0:
+        # Not only English
+        return True
+    else:
+        return False
+
+
+# 刪除 標點符號 !"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~
+# translator = str.maketrans('', '', string.punctuation)
+# We have to save the apostrophe
+translator = str.maketrans('', '', '!"#()$%&\*+,-./:;<=>?@[\\]^_`{|}~，。；、：？！（）“”〝〞‵′「」')
+
+word_count = dict()
+for i in range(90, 108):
+    year = str(i)
+    ctr = 0
+    text = open('D:\\Justin\'s_University\\專題(learning)\\txt\\AST\\'+str(i)+'.txt',encoding='utf-8')
+#     text = open('D:\\Justin\'s_University\\專題(learning)\\四技二專\\txt\\'+str(i)+'.txt',encoding='utf-8')
+    text1 = text.read()
+    words = text1.split()
+    for word in words:
+        # checking Chinese words
+        if check_contain_chinese(word):
+            pass
+        # selection
+        elif word is '(A)' or word is '(B)' or word is '(C)' or word is '(D)' or word is '(E)' or word is '(F)' or word is '(G)' or word is '(H)' or word is '(I)' or word is '(J)':
+            pass
+        # checking only English or with apostrophe
+        elif check_contain_only_english(word):
+            pass
+        else:
+            word = word.translate(translator).lower()
+            # not appear before
+            if word not in word_count:
+                word_count.setdefault(word, []).append(year)
+            else:
+                if year not in word_count[word]:
+                    word_count[word].append(year)
+
+# -------------別忘了 91-2, 92-2-------------------------------------------------------------------------
+# for i in range(93, 94):
+#     year = 108
+#     ctr = 0
+#     # 開91-2 和 92-2的檔案
+#     text = open('D:\\Justin\'s_University\\專題(learning)\\txt\\AST\\'+str(i)+'-2'+'.txt',encoding='utf-8')
+#     text1= text.read()
+#     words = text1.split()
+#     for word in words:
+#         # checking Chinese words
+#         if check_contain_chinese(word):
+#             pass
+#         # selection
+#         elif word is '(A)' or word is '(B)' or word is '(C)' or word is '(D)' or word is '(E)' or word is '(F)' or word is '(G)' or word is '(H)' or word is '(I)' or word is '(J)':
+#             pass
+#         # checking only English or with apostrophe
+#         elif check_contain_only_english(word):
+#             pass
+#         else:
+#             word = word.translate(translator).lower()
+#             # not appear before
+#             # 但仍存在91,92年裡面
+#             if word not in word_count:
+#                 word_count.setdefault(word, []).append(year)
+#             else:
+#                 if year not in word_count[word]:
+#                     word_count[word].append(year)
+# -----------------------------------------------------------------------------------------------------------
+
+
+years_list = [year for year in range(90, 108)]
+years_list = ['words'] + years_list
+# print(forLoop)
+# print(years_list)
+for word, years in word_count.items():
+    print("%s : " % word, end='')
+    # print(type(word)) --> str
+    for year in years:
+        print(year, end=' ')
+    # print(type(year)) --> str
+    print("\n")
+
+# output_file = open('D:\\Justin\'s_University\\專題(learning)\\Software\\Word_Count\\output\\'+'Word_Appear_Years'+'.csv', 'w', newline='')
+# writer = csv.writer(output_file)
+# writer.writerow(['word', years_list])
+# with open('D:\\Justin\'s_University\\專題(learning)\\Software\\Word_Count\\output\\'+'Word_Appear_Years_AST'+'.csv', 'w', newline='') as csvFile:
+with open('D:\\Justin\'s_University\\專題(learning)\\指考\\output\\'+'Word_Appear_Years_AST'+'.csv', 'w', newline='') as csvFile:    
+    dictWriter = csv.DictWriter(csvFile, fieldnames=years_list)
+    dictWriter.writeheader()
+
+    for words, years in word_count.items():
+        output_list = dict()
+        output_list['words'] = words
+        for i in range(90,108):
+            ctr = 0
+            if str(i) in years:
+                output_list[i] = '1'
+            else:
+                output_list[i] = ''
+        # print(output_list)
+        dictWriter.writerow(output_list)
+    # writer.writerow([words, output_list])
