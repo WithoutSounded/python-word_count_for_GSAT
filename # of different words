@@ -1,0 +1,100 @@
+import csv
+import string
+
+
+def check_contain_chinese(check_str):
+    for ch in check_str:
+        if u'\u4e00' <= ch <= u'\u9fff':
+            return True
+    return False
+
+
+def check_contain_only_english(check_str):
+    ctr = 0
+    for en in check_str:
+        if 97 <= ord(en) <= 122:
+            ctr += 0
+        elif 65 <= ord(en) <= 90:
+            ctr += 0
+        elif ord(en) == 39:
+            ctr += 0
+        else:
+            ctr += 1
+    if ctr != 0:
+        # Not only English
+        return True
+    else:
+        return False
+
+
+# 刪除 標點符號 !"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~
+# translator = str.maketrans('', '', string.punctuation)
+# We have to save the apostrophe
+translator = str.maketrans('', '', '!"#()$%&\*+,-./:;<=>?@[\\]^_`{|}~，。；、：？！（）“”〝〞‵′「」')
+
+
+different_word = {}
+for i in range(90, 108):
+    word_count = {}
+    text = open('D:\\Justin\'s_University\\專題(learning)\\txt\\AST\\'+str(i)+'.txt',encoding = 'utf8').read()
+#     text = open('D:\\Justin\'s_University\\專題(learning)\\四技二專\\txt\\'+str(i)+'.txt',encoding = 'utf8').read()
+
+    words = text.split()
+    for word in words:
+        if check_contain_chinese(word):
+            pass
+        elif word is '(A)' or word is '(B)' or word is '(C)' or word is '(D)' or word is '(E)' or word is '(F)' or word is '(G)' or word is '(H)' or word is '(I)' or word is '(J)':
+            pass
+        elif check_contain_only_english(word):
+            pass
+        else:
+            word = word.translate(translator).lower()
+            # dictionary
+            count = word_count.get(word, 0)
+            count += 1
+            word_count[word] = count
+
+    different_word[i] = len(word_count)
+
+# sorting from highest to lowest
+    word_count_list = sorted(word_count, key=word_count.get, reverse=True)
+
+# -----------------------------------91-2---------------------------------------------------------------
+
+# text = open('D:\\Justin\'s_University\\專題(learning)\\txt\\AST\\93-2.txt',encoding = 'utf8').read()
+# i = 93.2
+# words = text.split()
+# word_count = {}
+# for word in words:
+#     if check_contain_chinese(word):
+#         pass
+#     elif word is '(A)' or word is '(B)' or word is '(C)' or word is '(D)' or word is '(E)' or word is '(F)' or word is '(G)' or word is '(H)' or word is '(I)' or word is '(J)':
+#         pass
+#     elif check_contain_only_english(word):
+#         pass
+#     else:
+#         word = word.translate(translator).lower()
+#         # dictionary
+#         count = word_count.get(word, 0)
+#         count += 1
+#         word_count[word] = count
+#     different_word[i] = len(word_count)
+
+# # sorting from highest to lowest
+# word_count_list = sorted(word_count, key=word_count.get, reverse=True)
+
+# save as csv-------------------------------------------------------------------------------------------------
+output_file = open('D:\\Justin\'s_University\\專題(learning)\\指考\\output\\# of different words_AST.csv', 'w', newline='')
+writer = csv.writer(output_file)
+writer.writerow(['year', 'number'])
+'''for word in word_count_list:
+        writer.writerow([word, word_count[word]])'''
+
+for i in different_word:
+    writer.writerow([i, different_word[i]])
+    print([i, different_word[i]])
+#     writer.writerow()
+
+output_file.close()
+
+# writer.writerow(["different word", len(word_count)])
