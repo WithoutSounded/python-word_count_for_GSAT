@@ -3,3 +3,5 @@ GSAT's word count in python
 
 
 處理GSAT、BCT、TVE42、TVE等國家考試的單字，並且統計總出現次數、出現年度、年度是否出現等等.............
+
+基本文件為.xlsx 和 .csv為主要儲存檔案
